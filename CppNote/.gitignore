@@ -1,0 +1,7 @@
+build
+/vscodecmakecpp/build
+/namespace/build
+/struct/build
+/function/build
+/pretreatment/build
+/class/build

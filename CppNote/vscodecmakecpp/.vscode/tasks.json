@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe vscodecmakecpp",
+			"command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"main.cpp",
+        "test.cpp",
+				"-o",
+				"${workspaceFolder}\\src\\${workspaceFolderBasename}.exe"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}\\src"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译器: E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe"
+		}
+	]
+}
