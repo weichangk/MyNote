@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- 
+有时候我们需要父组件直接访问子组件，子组件直接访问父组件，或者是子组件访问跟组件。
+  父组件访问子组件：使用$children或$refs reference(引用)。this.$children是一个数组类型，它包含所有子组件对象。
+  子组件访问父组件：使用$parent
+
+$children的缺陷：
+  通过$children访问子组件时，是一个数组类型，访问其中的子组件必须通过索引值。
+  但是当子组件过多，我们需要拿到其中一个时，往往不能确定它的索引值，甚至还可能会发生变化。
+  有时候，我们想明确获取其中一个特定的组件，这个时候就可以使用$refs
+
+$refs的使用：
+  $refs和ref指令通常是一起使用的。
+  首先，我们通过ref给某一个子组件绑定一个特定的ID。
+  其次，通过this.$refs.ID就可以访问到该组件了。
+
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    {{msg}}
+    <hr>
+    <cpn ref="ref"></cpn>
+    <button @click="btnChildrenCpnClick">使用 children 访问 cpn </button>
+    <button @click="btnRefsCpnClick">使用 refs 访问 cpn</button>
+  </div>
+</body>
+</html>
+
+<template id="cpn1">
+  <div>
+    <p>我是cpn1 p</p>
+  </div>
+</template>
+<template id="cpn">
+  <div>
+    <p>我是cpn p</p>
+    <cpn1 ref="ref1"></cpn1>
+    <!--<cpn1></cpn1>-->
+  </div>
+</template>
+
+<script src="js/vue.js"></script>
+<script>
+  const cpn1 = {
+    template: "#cpn1",
+    data(){
+      return {
+        name: "my name is cpn1"
+      }
+    },
+    methods: {
+      show(){
+        console.log("hello cpn1");
+      }
+    },
+  }
+
+  const cpn = {
+    template: "#cpn",
+    data(){
+      return {
+        name: "my name is cpn"
+      }
+    },
+    methods: {
+      show(){
+        console.log("hello cpn");
+      }
+    },
+    components: {
+      cpn1,
+    },
+  }
+
+  const app = new Vue({
+    el: "#app",
+    data: {
+      msg: "hello 组件间通信-父访问子",
+    },
+    components: {
+      cpn,
+    },
+    methods: {
+      btnChildrenCpnClick(){
+        console.log(this.$children)//如果组件模板中没有使用子组件，那么该组件.$children下没有子组件！！！ 
+        this.$children[0].show()
+        console.log(this.$children[0].$children[0])
+        this.$children[0].$children[0].show()
+      },
+      btnRefsCpnClick(){
+        console.log(this.$refs)
+        console.log(this.$refs.ref)
+        console.log(this.$refs.ref.name)
+        console.log(this.$refs.ref.$refs.ref1)
+        console.log(this.$refs.ref.$refs.ref1.name)
+      },
+    }
+  })
+</script>

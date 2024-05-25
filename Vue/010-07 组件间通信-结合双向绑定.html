@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+    <hr>
+    <cpn :propa="a" :propb="b" @cpnachange="appachange" @cpnbchange="appbchange"></cpn>
+  </div>
+</body>
+</html>
+
+<template id="cpn">
+  <div>
+    <p>我是子组件cpn 的段落</p>
+
+    <p>我是父组件传到子组件的props a: {{propa}}</p>
+    <p>我是父组件传到子组件的data a: {{cpna}}</p>
+
+    <!--子组件元素不应该直接绑定props 中的数据，应该绑定data中的数据-->
+    <!--<input type="text" v-model="propa">-->
+    <input type="text" v-model="cpna">
+
+    <p>我是父组件传到子组件的props b: {{propb}}</p>
+    <p>我是父组件传到子组件的data a: {{cpnb}}</p>
+
+    <!--<input type="text" v-model="propb">-->
+    <input type="text" v-model="cpnb">
+
+
+    <hr>
+    <p>实现组件间双向绑定</p>
+    <input type="text" :value="cpna" @input="acpninput"><br>
+    <input type="text" :value="cpnb" @input="bcpninput">
+
+  </div>
+</template>
+
+<script src="js/vue.js"></script>
+<script>
+  const cpn = {
+    template: "#cpn",
+    props:["propa", "propb"],
+    data(){
+      return {
+        cpna: this.propa,
+        cpnb: this.propb,
+      }
+    },
+    methods: {
+      acpninput(event){
+        this.cpna = event.target.value;
+        this.$emit("cpnachange", this.cpna)//
+
+        this.cpnb = this.cpna * 100;
+        this.$emit("cpnbchange", this.cpnb)
+      },
+      bcpninput(event){
+        this.cpnb = event.target.value;
+        this.$emit("cpnbchange", this.cpnb)//
+
+        this.cpna = this.cpnb / 100;
+        this.$emit("cpnachange", this.cpna)
+      }
+    }
+  }
+
+  const app = new Vue({
+    el: "#app",
+    data: {
+      msg: "hello 组件间通信-结合双向绑定  我是父组件",
+      a: 10,
+      b: 20,
+    },
+    components: {
+      cpn,
+    },
+    methods: {
+      appachange(value){
+        this.a = value;
+      },
+      appbchange(value){
+        this.b = value;
+      }
+    }
+  })
+
+</script>
